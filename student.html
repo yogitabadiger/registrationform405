@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registered Students</title>
+  <style>
+    :root {
+      --brand:#13547a;
+      --brand-dark:#0d3a55;
+      --card-bg:#ffffff;
+      --muted:#f5f8fb;
+    }
+    body {
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin:0;
+      background:linear-gradient(135deg,#d9eaf7,#f8faff);
+      color:#333;
+      min-height:100vh;
+    }
+    header {
+      width:100%;
+      position:fixed;
+      top:0; left:0;
+      padding:15px 40px;
+      background:var(--card-bg);
+      border-bottom:2px solid var(--brand);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      z-index:10;
+      box-shadow:0px 2px 6px rgba(0,0,0,0.08);
+    }
+    header h2 {
+      margin:0;
+      font-size:1.6rem;
+      color:var(--brand);
+      font-weight:800;
+      letter-spacing:1px;
+    }
+    nav a {
+      text-decoration:none;
+      background:var(--brand);
+      color:#fff;
+      padding:7px 14px;
+      margin-left:6px;
+      border-radius:20px;
+      font-weight:500;
+    }
+    nav a:hover { background:var(--brand-dark); }
+
+    main {
+      margin-top:110px;
+      padding:36px;
+      background:var(--card-bg);
+      width:86%;
+      max-width:1150px;
+      margin-left:auto;
+      margin-right:auto;
+      border-radius:12px;
+      box-shadow:0 6px 22px rgba(19,84,122,0.08);
+    }
+
+    h2 {
+      text-align:center;
+      color:var(--brand);
+      font-size:1.7rem;
+      margin-bottom:22px;
+    }
+    .table-wrap {
+      width:100%;
+      overflow:hidden;
+      border-radius:10px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.06);
+      border:1px solid #e9eef4;
+      background:white;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:0.95rem;
+    }
+    thead th {
+      background:var(--brand);
+      color:#fff;
+      padding:12px 10px;
+      text-transform:uppercase;
+      font-size:0.85rem;
+      letter-spacing:.6px;
+      text-align:left;
+    }
+    th, td {
+      border-bottom:1px solid #eef3f7;
+      padding:12px 10px;
+      vertical-align:middle;
+    }
+    tbody tr:hover { background:var(--muted); }
+    td.actions {
+      width:170px;
+      text-align:center;
+      white-space:nowrap;
+    }
+    .actions .btn {
+      display:inline-block;
+      margin:0 4px;
+      padding:7px 12px;
+      font-size:0.86rem;
+      border-radius:20px;
+      border:none;
+      cursor:pointer;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    .actions .view-btn { background:#2e8b57; color:white; }
+    .actions .delete-btn { background:#d9534f; color:white; }
+    .actions .btn:hover { transform:translateY(-2px); opacity:.95; }
+
+    .back-btn {
+      display:block;
+      margin:26px auto 0;
+      background:var(--brand);
+      color:white;
+      border:none;
+      padding:10px 26px;
+      border-radius:25px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .back-btn:hover { background:var(--brand-dark); }
+
+    /* Modal Styles */
+    .modal {
+      display:none;
+      position:fixed;
+      z-index:1200;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.45);
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .modal.open { display:flex; }
+    .modal-content {
+      width:100%;
+      max-width:820px;
+      background:white;
+      border-radius:12px;
+      padding:22px;
+      box-shadow:0 14px 50px rgba(0,0,0,0.18);
+      position:relative;
+      max-height:calc(100vh - 80px);
+      overflow-y:auto;
+    }
+    .modal-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .modal-header h3 { margin:0; color:var(--brand); font-size:1.25rem; }
+    .modal-close {
+      background:transparent;
+      border:none;
+      font-size:22px;
+      cursor:pointer;
+      color:#666;
+    }
+    .modal-body {
+      display:grid;
+      grid-template-columns:130px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    .student-photo {
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      object-fit:cover;
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    }
+    .detail-line { margin:6px 0; font-size:0.95rem; }
+    .detail-line strong { color:#114c5b; min-width:140px; display:inline-block; }
+    .modal-footer {
+      margin-top:18px;
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+    }
+    .edit-btn {
+      background:#f0ad4e;
+      color:white;
+      padding:8px 14px;
+      border-radius:20px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .close-btn {
+      background:#777;
+      color:white;
+      padding:8px 14px;
+      border-radius:20px;
+      border:none;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    /* PDF Modal */
+    #pdfModal iframe {
+      width:100%;
+      height:85vh;
+      border:none;
+      border-radius:8px;
+    }
+    #pdfModal .modal-content {
+      max-width:900px;
+      padding:20px;
+    }
+
+    @media (max-width:820px) {
+      .modal-body { grid-template-columns:1fr; text-align:center; }
+      .modal-body .detail-line strong { display:block; margin-bottom:6px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Engineering Student Registration</h2>
+    <nav>
+      <a href="index.html">Register</a>
+      <a href="student.html" class="active">Student List</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>📋 Registered Students</h2>
+    <div class="table-wrap">
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>City</th>
+            <th>Registered On</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <button class="back-btn" onclick="goBack()">⬅️ Back to Registration</button>
+  </main>
+
+  <!-- Student Detail Modal -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Student Details</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="edit-btn" id="modalEditBtn">Edit</button>
+        <button class="close-btn" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF Preview Modal -->
+  <div id="pdfModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>📄 Resume Preview</h3>
+        <button class="modal-close" onclick="closePDF()">&times;</button>
+      </div>
+      <iframe id="pdfFrame"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const tableBody = document.querySelector("#studentTable tbody");
+    let students = JSON.parse(localStorage.getItem("students")) || [];
+    const modal = document.getElementById("viewModal");
+    const modalBody = document.getElementById("modalBody");
+    const modalEditBtn = document.getElementById("modalEditBtn");
+    const pdfModal = document.getElementById("pdfModal");
+    const pdfFrame = document.getElementById("pdfFrame");
+    let currentIndex = null;
+
+    function formatDateTime(dt) { return dt || "N/A"; }
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      if (!students.length) {
+        tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:18px;color:#666">No registered students yet.</td></tr>`;
+        return;
+      }
+      students.forEach((s, index) => {
+        const fullName = `${s.fname || ""} ${s.mname || ""} ${s.lname || ""}`.trim();
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${s.rollno || "-"}</td>
+          <td>${fullName || "-"}</td>
+          <td>${s.gender || "-"}</td>
+          <td>${s.email || "-"}</td>
+          <td>${s.phone || "-"}</td>
+          <td>${s.department || "-"}</td>
+          <td>${s.year || "-"}</td>
+          <td>${s.city || "-"}</td>
+          <td>${formatDateTime(s.dateTime) || "-"}</td>
+          <td class="actions">
+            <button class="btn view-btn" onclick="openView(${index})">View</button>
+            <button class="btn delete-btn" onclick="deleteStudent(${index})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function openView(index) {
+      currentIndex = index;
+      const s = students[index];
+
+      const photoHTML = s.photo
+        ? `<img src="${s.photo}" alt="Student photo" class="student-photo">`
+        : `<div style="width:130px;height:130px;border-radius:50%;background:#f2f6f9;
+            display:flex;align-items:center;justify-content:center;color:#7b8a90;
+            font-weight:600">No Photo</div>`;
+
+      const resumeHTML = s.document
+        ? `<button class="btn view-btn" onclick="openPDF('${s.document}')">Preview PDF</button>`
+        : "-";
+
+      modalBody.innerHTML = `
+        ${photoHTML}
+        <div>
+          <h4>👤 Personal Details</h4>
+          <p class="detail-line"><strong>First Name:</strong> ${s.fname || "-"}</p>
+          <p class="detail-line"><strong>Middle Name:</strong> ${s.mname || "-"}</p>
+          <p class="detail-line"><strong>Last Name:</strong> ${s.lname || "-"}</p>
+          <p class="detail-line"><strong>Date of Birth:</strong> ${s.dob || "-"}</p>
+          <p class="detail-line"><strong>Gender:</strong> ${s.gender || "-"}</p>
+          <p class="detail-line"><strong>Email:</strong> ${s.email || "-"}</p>
+          <p class="detail-line"><strong>Phone:</strong> ${s.phone || "-"}</p>
+          <p class="detail-line"><strong>Password:</strong> ${s.password || "-"}</p>
+          <p class="detail-line"><strong>Favorite Color:</strong> 
+             <span style="background:${s.color};padding:2px 12px;border-radius:4px;">${s.color}</span></p>
+          <p class="detail-line"><strong>Resume:</strong> ${resumeHTML}</p>
+
+          <h4>🏫 Academic Details</h4>
+          <p class="detail-line"><strong>USN Number:</strong> ${s.rollno || "-"}</p>
+          <p class="detail-line"><strong>Department:</strong> ${s.department || "-"}</p>
+          <p class="detail-line"><strong>Year:</strong> ${s.year || "-"}</p>
+          <p class="detail-line"><strong>Semester:</strong> ${s.sem || "-"}</p>
+          <p class="detail-line"><strong>CGPA:</strong> ${s.cgpa || "-"}</p>
+          <p class="detail-line"><strong>Favorite Subject:</strong> ${s.favsub || "-"}</p>
+          <p class="detail-line"><strong>Last Semester Percentage:</strong> ${s.percentage || "-"}%</p>
+
+          <h4>⚙️ Additional Details</h4>
+          <p class="detail-line"><strong>Address:</strong> ${s.address || "-"}</p>
+          <p class="detail-line"><strong>City:</strong> ${s.city || "-"}</p>
+          <p class="detail-line"><strong>State:</strong> ${s.state || "-"}</p>
+          <p class="detail-line"><strong>Pincode:</strong> ${s.pincode || "-"}</p>
+          <p class="detail-line"><strong>LinkedIn:</strong> <a href="${s.linkedin}" target="_blank">${s.linkedin}</a></p>
+          <p class="detail-line"><strong>GitHub:</strong> <a href="${s.github}" target="_blank">${s.github}</a></p>
+          <p class="detail-line"><strong>Hobbies:</strong> ${s.hobbies || "-"}</p>
+          <p class="detail-line"><strong>Clubs Interested:</strong> ${s.clubs?.join(", ") || "-"}</p>
+          <p class="detail-line"><strong>Skills:</strong> ${s.skills || "-"}</p>
+          <p class="detail-line"><strong>Languages Known:</strong> ${s.languages || "-"}</p>
+          <p class="detail-line"><strong>Registered On:</strong> ${formatDateTime(s.dateTime)}</p>
+        </div>
+      `;
+
+      modalEditBtn.onclick = () => editStudent(index);
+      modal.classList.add("open");
+    }
+
+    function openPDF(base64URL) {
+      pdfFrame.src = base64URL;
+      pdfModal.classList.add("open");
+    }
+
+    function closePDF() {
+      pdfModal.classList.remove("open");
+      pdfFrame.src = "";
+    }
+
+    function closeModal() { modal.classList.remove("open"); }
+
+    function deleteStudent(index) {
+      if (confirm("Are you sure you want to delete this record?")) {
+        students.splice(index, 1);
+        localStorage.setItem("students", JSON.stringify(students));
+        renderTable();
+        closeModal();
+      }
+    }
+
+    function editStudent(index) {
+      localStorage.setItem("editIndex", index);
+      closeModal();
+      window.location.href = "edit.html";
+    }
+
+    function goBack() { window.location.href = "edit.html"; }
+
+    renderTable();
+  </script>
+</body>
+</html>
