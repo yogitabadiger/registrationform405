@@ -138,40 +138,40 @@
   <!-- Registration Page -->
   <div class="form-container" id="registerPage">
     <h2>🎓 Student Registration Form</h2>
-    <form id="studentForm" action="insert.php" method="POST" enctype="multipart/form-data">
+      <form id="studentForm" action="insert.php" method="POST" enctype="multipart/form-data">
       <fieldset>
         <legend>👤 Personal Details</legend>
-        <label>First Name:</label><input type="text" name="fname" required placeholder="Enter first name">
-        <label>Middle Name:</label><input type="text" name="mname" placeholder="Optional">
-        <label>Last Name:</label><input type="text" name="lname" required placeholder="Enter last name">
-        <label>Date of Birth:</label><input type="date" name="dob" required>
+        <label>First Name:</label><input type="text" id="fname" required autofocus placeholder="Enter first name">
+        <label>Middle Name:</label><input type="text" id="mname" placeholder="Optional">
+        <label>Last Name:</label><input type="text" id="lname" required placeholder="Enter last name">
+        <label>Date of Birth:</label><input type="date" id="dob" required>
         <label>Gender:</label><br>
         <input type="radio" name="gender" value="Male" required> Male
         <input type="radio" name="gender" value="Female"> Female
         <input type="radio" name="gender" value="Other"> Other <br><br>
-        <label>Email:</label><input type="email" name="email" required placeholder="you@example.com">
-        <label>Password:</label><input type="password" name="password" required minlength="6">
-        <label>Phone:</label><input type="tel" name="phone" pattern="[0-9]{10}" required>
-        <label>Favorite Color:</label><input type="color" name="color" value="#4e9af1">
-        <label>Profile Photo:</label><input type="file" name="photo" accept="image/*">
-        <label>Upload Resume:</label><input type="file" name="document" accept="file/*">
+        <label>Email:</label><input type="email" id="email" required placeholder="you@example.com">
+        <label>Password:</label><input type="password" id="password" required minlength="6">
+        <label>Phone:</label><input type="tel" id="phone" pattern="[0-9]{10}" required>
+        <label>Favorite Color:</label><input type="color" id="color" value="#4e9af1">
+        <label>Profile Photo:</label><input type="file" id="photo" accept="image/*">
+        <label>Upload Resume:</label><input type="file" id="document" accept="file/*">
       </fieldset>
 
       <fieldset>
         <legend>🏫 Academic Details</legend>
-        <label>USN Number:</label><input type="text" name="rollno" pattern="[A-Za-z0-9]{10}" required>
+        <label>USN Number:</label><input type="text" id="rollno" pattern="[A-Za-z0-9]{10}" required>
         <label>Department:</label>
-        <select name="department" required>
+        <select id="department" required>
           <optgroup label="Engineering">
             <option>CSE</option><option>ECE</option><option>AI&ML</option>
             <option>IS</option><option>MECH</option><option>CIVIL</option><option>EEE</option>
           </optgroup>
         </select>
-        <label>YEAR:</label><input type="number" name="year" min="1" max="4" required>
-        <label>SEM:</label><input type="number" name="sem" min="1" max="8" required>
-        <label>CGPA:</label><input type="number" name="cgpa" min="0" max="10" step="0.01">
+        <label>YEAR:</label><input type="number" id="year" min="1" max="4" required>
+        <label>SEM:</label><input type="number" id="sem" min="1" max="8" required>
+        <label>CGPA:</label><input type="number" id="cgpa" min="0" max="10" step="0.01">
         <label>Favorite Subject:</label>
-        <input type="text" list="subjects" name="favsub">
+        <input type="text" list="subjects" id="favsub">
         <datalist id="subjects">
           <option>JAVA</option><option>HTML</option><option>C</option>
           <option>C++</option><option>DS</option><option>PYTHON</option>
@@ -179,40 +179,146 @@
           <option>AI</option><option>ML</option>
         </datalist>
         <label>Last Semester Percentage:</label>
-        <input type="range" name="percentage" min="0" max="100" value="70" oninput="output.value = percentage.value">
+        <input type="range" id="percentage" min="0" max="100" value="70" oninput="output.value = percentage.value">
         <output name="output" for="percentage">70</output>%
       </fieldset>
 
       <fieldset>
         <legend>⚙️ Additional Details</legend>
-        <label>Address:</label><textarea name="address" rows="3" required></textarea>
-        <label>City:</label><input type="text" name="city" required>
+        <label>Address:</label><textarea id="address" rows="3" required></textarea>
+        <label>City:</label><input type="text" id="city" required>
         <label>State:</label>
-        <select name="state" required>
+        <select id="state" required>
           <option value="">--Select--</option>
           <option>Karnataka</option><option>Tamil Nadu</option><option>Maharashtra</option><option>Kerala</option>
         </select>
-        <label>Pincode:</label><input type="number" name="pincode" pattern="[0-9]{6}" required>
-        <label>LinkedIn:</label><input type="url" name="linkedin" placeholder="https://linkedin.com/in/...">
-        <label>GitHub:</label><input type="url" name="github" placeholder="https://example.com/">
-        <label>Hobbies:</label><input type="text" name="hobbies" placeholder="Reading, Coding, etc.">
+        <label>Pincode:</label><input type="number" id="pincode" pattern="[0-9]{6}" required>
+        <label>LinkedIn:</label><input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
+        <label>GITHub:</label><input type="url" id="github" placeholder="https://example.com/">
+        <label>Hobbies:</label><input type="text" id="hobbies" placeholder="Reading, Coding, etc.">
         <label>Clubs Interested:</label><br>
-        <input type="checkbox" name="clubs[]" value="Coding"> Coding
-        <input type="checkbox" name="clubs[]" value="Robotics"> Robotics
-        <input type="checkbox" name="clubs[]" value="Music"> Music
-        <input type="checkbox" name="clubs[]" value="Sports"> Sports <br><br>
-        <label>Skills:</label><input type="search" name="skills" placeholder="Search skills">
-        <label>Languages Known:</label><input type="text" name="languages" list="langList">
+        <input type="checkbox" name="clubs" value="Coding"> Coding
+        <input type="checkbox" name="clubs" value="Robotics"> Robotics
+        <input type="checkbox" name="clubs" value="Music"> Music
+        <input type="checkbox" name="clubs" value="Sports"> Sports <br><br>
+        <label>Skills:</label><input type="search" id="skills" placeholder="Search skills">
+        <label>Languages Known:</label><input type="text" id="languages" list="langList">
         <datalist id="langList"><option>English</option><option>Hindi</option><option>Kannada</option></datalist>
       </fieldset>
 
       <div class="buttons">
         <input type="reset" value="Reset">
+        <!-- ✅ Register button - redirect happens only after validation -->
         <input type="submit" value="Register">
       </div>
     </form>
   </div>
 
   <footer>© 2025 Engineering Student Registration | Developed by You</footer>
+
+  <script>
+  const form = document.getElementById('studentForm');
+
+  function getCheckedValues(name) {
+    const nodes = document.querySelectorAll(`input[name="${name}"]:checked`);
+    return Array.from(nodes).map(n => n.value);
+  }
+
+  // Helper: Convert file to Base64
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve('');
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Validation
+    if (!form.checkValidity()) {
+      alert("⚠️ Please fill all required fields correctly before submitting.");
+      form.reportValidity();
+      return;
+    }
+
+    const genderSelected = document.querySelector('input[name="gender"]:checked');
+    if (!genderSelected) {
+      alert("⚠️ Please select your gender.");
+      return;
+    }
+
+    const phone = document.getElementById('phone').value.trim();
+    if (!/^[0-9]{10}$/.test(phone)) {
+      alert("⚠️ Phone number must be 10 digits.");
+      return;
+    }
+
+    const rollno = document.getElementById('rollno').value.trim();
+    if (!/^[A-Za-z0-9]{10}$/.test(rollno)) {
+      alert("⚠️ USN Number must be 10 characters (letters/numbers only).");
+      return;
+    }
+
+    const pincode = document.getElementById('pincode').value.trim();
+    if (!/^[0-9]{6}$/.test(pincode)) {
+      alert("⚠️ Pincode must be 6 digits.");
+      return;
+    }
+
+    // ✅ Convert uploaded files to Base64
+    const photoFile = form.photo.files[0];
+    const docFile = form.document.files[0];
+
+    const photoBase64 = await fileToBase64(photoFile);
+    const documentBase64 = await fileToBase64(docFile);
+
+    const now = new Date();
+    const dateTime = now.toLocaleString();
+
+    const student = {
+      fname: form.fname.value.trim(),
+      mname: form.mname.value.trim(),
+      lname: form.lname.value.trim(),
+      dob: form.dob.value,
+      gender: genderSelected.value,
+      email: form.email.value.trim(),
+      password: form.password.value,
+      phone: phone,
+      color: form.color.value,
+      photo: photoBase64,
+      document: documentBase64,
+      rollno: rollno,
+      department: form.department.value,
+      year: form.year.value,
+      sem: form.sem.value,
+      cgpa: form.cgpa.value,
+      favsub: form.favsub.value,
+      percentage: form.percentage ? form.percentage.value : '',
+      address: form.address.value.trim(),
+      city: form.city.value.trim(),
+      state: form.state.value,
+      pincode: pincode,
+      linkedin: form.linkedin.value.trim(),
+      github: form.github.value.trim(),
+      hobbies: form.hobbies.value.trim(),
+      clubs: getCheckedValues('clubs'),
+      skills: form.skills.value.trim(),
+      languages: form.languages.value.trim(),
+      dateTime: dateTime
+    };
+
+    const students = JSON.parse(localStorage.getItem('students')) || [];
+    students.push(student);
+    localStorage.setItem('students', JSON.stringify(students));
+
+    alert(`✅ Student Registered Successfully!\n📅 Registered On: ${dateTime}`);
+
+    window.location.href = 'student.html';
+  });
+</script>
 </body>
 </html>
